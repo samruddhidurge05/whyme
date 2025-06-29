@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>WTF Is Happening? | WhyMe.</title>
+  <link href="https://fonts.googleapis.com/css2?family=Comfortaa&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(to bottom right, #ffe4ec, #f3d8fc);
+      margin: 0;
+      padding: 0;
+      color: #333;
+    }
+
+    /* Navigation Styles */
+    nav {
+      background-color: #ff6b81;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 30px;
+      color: white;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    nav .logo {
+      font-size: 1.8rem;
+      font-weight: bold;
+      text-shadow: 1px 1px #e84a5f;
+      transition: transform 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    nav .logo:hover {
+      transform: scale(1.05);
+    }
+
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 20px;
+    }
+
+    nav ul li a {
+      text-decoration: none;
+      color: white;
+      font-weight: 500;
+      position: relative;
+      padding: 5px 10px;
+      transition: all 0.3s ease;
+    }
+
+    nav ul li a::before {
+      content: "";
+      position: absolute;
+      width: 0;
+      height: 2px;
+      bottom: 0;
+      left: 0;
+      background-color: white;
+      transition: all 0.3s ease;
+    }
+
+    nav ul li a:hover::before {
+      width: 100%;
+    }
+
+    nav ul li a::after {
+      content: "";
+      position: absolute;
+      width: 0;
+      height: 2px;
+      top: 0;
+      right: 0;
+      background-color: white;
+      transition: all 0.3s ease;
+    }
+
+    nav ul li a:hover::after {
+      width: 100%;
+    }
+
+    nav ul li a:hover {
+      transform: translateY(-3px);
+      text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+    }
+
+    .container {
+      padding: 40px;
+      text-align: center;
+    }
+
+    .title {
+      font-size: 2.5rem;
+      margin-bottom: 20px;
+      color: #ff6b81;
+    }
+
+    .message-box {
+      font-size: 1.2rem;
+      margin-bottom: 40px;
+      color: #444;
+    }
+
+    .options {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      justify-content: center;
+    }
+
+    .option {
+      background: #d3b5e5;
+      border-radius: 15px;
+      padding: 30px;
+      width: 250px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      color: #fff;
+    }
+
+    .option:hover {
+      background: #ff6b81;
+      transform: scale(1.05);
+    }
+
+    .option h3 {
+      margin-top: 0;
+      font-size: 1.4rem;
+    }
+
+    .option p {
+      font-size: 0.95rem;
+    }
+
+    #popup {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.6);
+      z-index: 9999;
+      justify-content: center;
+      align-items: center;
+    }
+
+    #popupContent {
+      background: #fff;
+      padding: 30px;
+      border-radius: 20px;
+      max-width: 400px;
+      width: 90%;
+      position: relative;
+      text-align: left;
+    }
+
+    #popupContent button.close-btn {
+      position: absolute;
+      top: 10px;
+      right: 15px;
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+    }
+
+    #popupContent input[type="text"],
+    #popupContent button.send-btn {
+      width: 100%;
+      padding: 10px;
+      margin-top: 10px;
+      font-size: 1rem;
+    }
+
+    #popupContent ul {
+      margin-top: 10px;
+      padding-left: 20px;
+    }
+
+    #popupContent ul li {
+      margin-bottom: 6px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <nav>
+    <div class="logo">
+      <i class="fas fa-heartbeat"></i> WhyMe.
+    </div>
+    <ul>
+      <li><a href="home.html">Home</a></li>
+      <li><a href="wtf.html">WTF?</a></li>
+      <li><a href="comfort.html">Comfort Zone</a></li>
+      <li><a href="meme.html">Memes</a></li>
+      <li><a href="bleed.html">Bleed & Earn</a></li>
+    </ul>
+  </nav>
+
+  <div class="container">
+    <h1 class="title">WTF is Happening?! 😵‍💫</h1>
+    <div class="message-box">
+      Okay bestie, you just got your period and your brain's like “what the actual flow?” 😳 Don’t worry, pick your vibe
+      and let’s break it down your way 💖
+    </div>
+
+    <div class="options">
+      <div class="option" onclick="loadContent('ai')">
+        <h3>AI Chat 🤖</h3>
+        <p>Talk to our chill AI who’ll explain stuff like your smart older sister with sass, facts, and Gen-Z lingo.</p>
+      </div>
+      <div class="option" onclick="loadContent('visual')">
+        <h3>Pretty Explained 📸</h3>
+        <p>Aesthetic cards + cute pics + soft tone = period knowledge that doesn’t scare you.</p>
+      </div>
+      <div class="option" onclick="loadContent('comfort')">
+        <h3>Comfort Mode 🧸</h3>
+        <p>If you're panicking, come here — calming words, heart emojis & deep breaths incoming.</p>
+      </div>
+      <div class="option" onclick="loadContent('meme')">
+        <h3>Meme Learner 😎</h3>
+        <p>Want to laugh while learning? Here's a meme-style education with no chill — but all truth.</p>
+      </div>
+      <div class="option" onclick="loadContent('real')">
+        <h3>Real Talk 🫂</h3>
+        <p>Honest, no-fluff facts explained like a friend would say IRL. No cringe, just real.</p>
+      </div>
+    </div>
+  </div>
+
+  <div id="popup">
+    <div id="popupContent">
+      <button class="close-btn" onclick="closeModal()">✖</button>
+      <div id="modalBody"></div>
+    </div>
+  </div>
+
+  <script>
+    async function loadContent(type) {
+      const modalBody = document.getElementById('modalBody');
+      let html = '';
+
+      switch (type) {
+        case 'ai':
+          html = `
+            <h2>AI Chat 🤖</h2>
+            <p>Ask a question below and get a smart answer from our AI assistant.</p>
+            <input type="text" id="userQuestion" placeholder="Type your question..." />
+            <button class="send-btn" onclick="submitQuestion()">Send</button>
+            <p id="aiResponse" style="margin-top:10px;"></p>
+          `;
+          break;
+        case 'visual':
+          html = `<h2>Pretty Explained 📸</h2><img src="https://cdn.pixabay.com/photo/2022/06/28/20/57/period-7291787_960_720.png" alt="Visual Card" width="100%">`;
+          break;
+        case 'comfort':
+          html = `<h2>Comfort Mode 🧸</h2><p>Close your eyes and take a deep breath. You’re not alone. Everything will be okay 🫂💖</p>`;
+          break;
+        case 'meme':
+          html = `<h2>Meme Learner 😂</h2><img src="https://cdn.pixabay.com/photo/2022/05/01/14/27/meme-7166210_960_720.jpg" alt="Meme" width="100%">`;
+          break;
+        case 'real':
+          html = `<h2>Real Talk 🫂</h2><ul><li>🩸 What is a period?</li><li>🥴 Mood swings?</li><li>🍫 Cravings?</li></ul>`;
+          break;
+      }
+
+      modalBody.innerHTML = html;
+      document.getElementById('popup').style.display = 'flex';
+    }
+
+    function closeModal() {
+      document.getElementById('popup').style.display = 'none';
+    }
+
+    async function submitQuestion() {
+      const question = document.getElementById('userQuestion').value;
+      const responseEl = document.getElementById('aiResponse');
+
+      responseEl.textContent = 'Thinking...';
+
+      try {
+        const response = await fetch('http://localhost:3000/api/ask', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ question })
+        });
+
+        const data = await response.json();
+        responseEl.textContent = data.reply;
+      } catch (error) {
+        responseEl.textContent = 'Sorry, something went wrong. 😢';
+        console.error(error);
+      }
+    }
+  </script>
+
+</body>
+
+</html>

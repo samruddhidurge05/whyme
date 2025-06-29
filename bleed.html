@@ -1,0 +1,1113 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bleed & Earn</title>
+  <link href="https://fonts.googleapis.com/css2?family=Comfortaa&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --bg-light: #fff0f6;
+      --bg-dark: #1a1a2e;
+      --card-light: #ffffffd0;
+      --card-dark: #16213e;
+      --text-light: #333;
+      --text-dark: #e6e6e6;
+      --primary: #ff69b4;
+      --accent: #b05ce2;
+      --success: #4cc9f0;
+      --warning: #f8961e;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Comfortaa', cursive;
+      background: linear-gradient(135deg, var(--bg-light), #f9e5ff);
+      color: var(--text-light);
+      padding: 0;
+      margin: 0;
+      transition: all 0.3s ease;
+      min-height: 100vh;
+    }
+
+    body.dark-mode {
+      background: var(--bg-dark);
+      color: var(--text-dark);
+    }
+
+    /* Navigation Styles */
+    nav {
+      background-color: #ff6b81;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 30px;
+      color: white;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    nav .logo {
+      font-size: 1.8rem;
+      font-weight: bold;
+      text-shadow: 1px 1px #e84a5f;
+      transition: transform 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    nav .logo:hover {
+      transform: scale(1.05);
+    }
+
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 20px;
+    }
+
+    nav ul li a {
+      text-decoration: none;
+      color: white;
+      font-weight: 500;
+      position: relative;
+      padding: 5px 10px;
+      transition: all 0.3s ease;
+    }
+
+    nav ul li a::before {
+      content: "";
+      position: absolute;
+      width: 0;
+      height: 2px;
+      bottom: 0;
+      left: 0;
+      background-color: white;
+      transition: all 0.3s ease;
+    }
+
+    nav ul li a:hover::before {
+      width: 100%;
+    }
+
+    nav ul li a::after {
+      content: "";
+      position: absolute;
+      width: 0;
+      height: 2px;
+      top: 0;
+      right: 0;
+      background-color: white;
+      transition: all 0.3s ease;
+    }
+
+    nav ul li a:hover::after {
+      width: 100%;
+    }
+
+    nav ul li a:hover {
+      transform: translateY(-3px);
+      text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+    }
+
+    /* Dark Mode Toggle */
+    .dark-toggle {
+      position: absolute;
+      top: 1.5rem;
+      right: 1.5rem;
+      background: var(--primary);
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+      transition: all 0.3s ease;
+      z-index: 1001;
+    }
+
+    .dark-toggle:hover {
+      transform: scale(1.1);
+    }
+
+    /* Main Content */
+    .container {
+      max-width: 900px;
+      margin: 2rem auto;
+      background: var(--card-light);
+      padding: 2.5rem;
+      border-radius: 2rem;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+      position: relative;
+    }
+
+    body.dark-mode .container {
+      background: var(--card-dark);
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+    }
+
+    /* Task Styles */
+    .task {
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      background: #fff7fb;
+      border-radius: 1rem;
+      padding: 0.75rem 1rem;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+      transition: all 0.3s ease;
+    }
+
+    body.dark-mode .task {
+      background: #1f2a4e;
+    }
+
+    .task:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .task input[type="checkbox"] {
+      margin-right: 1rem;
+      transform: scale(1.2);
+      accent-color: var(--primary);
+    }
+
+    .task .task-points {
+      margin-left: auto;
+      background: var(--accent);
+      color: white;
+      padding: 2px 8px;
+      border-radius: 10px;
+      font-size: 0.8rem;
+    }
+
+    /* Summary Section */
+    .summary {
+      margin-top: 2rem;
+      font-size: 1.3rem;
+      font-weight: bold;
+      color: var(--accent);
+      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      justify-content: space-between;
+    }
+
+    .summary-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .summary-value {
+      font-size: 1.8rem;
+      color: var(--primary);
+    }
+
+    /* Buttons */
+    .actions button,
+    .feature-section button,
+    .dark-toggle,
+    .mood-btn {
+      margin-top: 1rem;
+      margin-right: 1rem;
+      padding: 0.6rem 1.2rem;
+      background-color: var(--primary);
+      color: white;
+      border: none;
+      border-radius: 1rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .actions button:hover,
+    .feature-section button:hover,
+    .dark-toggle:hover,
+    .mood-btn:hover {
+      background-color: #e05599;
+      transform: translateY(-2px);
+    }
+
+    .actions button.secondary {
+      background-color: var(--accent);
+    }
+
+    .actions button.secondary:hover {
+      background-color: #9b45d6;
+    }
+
+    /* Feature Cards */
+    .badge,
+    .tip,
+    .gratitude,
+    .reminder,
+    .mood-card {
+      background-color: #fff6fb;
+      border-radius: 1rem;
+      padding: 1.5rem;
+      margin-top: 1.5rem;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+      transition: all 0.3s ease;
+    }
+
+    body.dark-mode .badge,
+    body.dark-mode .tip,
+    body.dark-mode .gratitude,
+    body.dark-mode .reminder,
+    body.dark-mode .mood-card {
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+    }
+
+    /* Form Elements */
+    textarea,
+    select {
+      width: 100%;
+      padding: 0.75rem;
+      border-radius: 0.75rem;
+      border: 1px solid #ccc;
+      margin-top: 0.75rem;
+      font-family: inherit;
+      box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.05);
+      background: white;
+      color: var(--text-light);
+      transition: all 0.3s ease;
+    }
+
+    body.dark-mode textarea,
+    body.dark-mode select {
+      background: #1f2a4e;
+      border-color: #3a3a5a;
+      color: var(--text-dark);
+    }
+
+    /* Progress Bar */
+    progress {
+      width: 100%;
+      height: 12px;
+      margin-top: 1rem;
+      border-radius: 6px;
+      box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    progress::-webkit-progress-bar {
+      background-color: #f0f0f0;
+      border-radius: 6px;
+    }
+
+    progress::-webkit-progress-value {
+      background-color: var(--primary);
+      border-radius: 6px;
+      transition: width 0.5s ease;
+    }
+
+    body.dark-mode progress::-webkit-progress-bar {
+      background-color: #1f2a4e;
+    }
+
+    /* Layout */
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1.5rem;
+      margin-top: 2rem;
+    }
+
+    /* Mood Options */
+    .mood-options {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 1rem;
+    }
+
+    .mood-btn {
+      margin: 0;
+      padding: 0.5rem 1rem;
+      font-size: 1.2rem;
+    }
+
+    .mood-btn.selected {
+      background-color: var(--success);
+      transform: scale(1.1);
+    }
+
+    .mood-btn.angry {
+      background-color: #f94144;
+    }
+
+    .mood-btn.sad {
+      background-color: #577590;
+    }
+
+    .mood-btn.neutral {
+      background-color: #43aa8b;
+    }
+
+    .mood-btn.happy {
+      background-color: #f9c74f;
+      color: #333;
+    }
+
+    .mood-btn.excited {
+      background-color: #f8961e;
+    }
+
+    /* Gratitude List */
+    .gratitude-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.5rem 0;
+      border-bottom: 1px dashed #ddd;
+    }
+
+    body.dark-mode .gratitude-item {
+      border-bottom-color: #444;
+    }
+
+    .gratitude-item button {
+      background: none;
+      border: none;
+      color: #ff6b6b;
+      cursor: pointer;
+      font-size: 1rem;
+    }
+
+    /* Add Task Form */
+    .add-task-form {
+      display: flex;
+      gap: 10px;
+      margin-top: 1rem;
+    }
+
+    .add-task-form input {
+      flex: 1;
+      padding: 0.5rem;
+      border-radius: 0.5rem;
+      border: 1px solid #ccc;
+    }
+
+    .add-task-form button {
+      padding: 0.5rem 1rem;
+      border-radius: 0.5rem;
+    }
+
+    /* Badges */
+    .badge-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 1rem;
+    }
+
+    .badge-item {
+      background: var(--accent);
+      color: white;
+      padding: 0.3rem 0.8rem;
+      border-radius: 1rem;
+      font-size: 0.8rem;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    /* Share Button */
+    .share-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 1rem;
+      width: 100%;
+      padding: 0.8rem;
+      border-radius: 1rem;
+      background: linear-gradient(to right, #4cc9f0, #4895ef);
+      color: white;
+      border: none;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .share-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(76, 201, 240, 0.3);
+    }
+
+    /* AI Suggestion */
+    .ai-suggestion {
+      background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+      padding: 1rem;
+      border-radius: 1rem;
+      margin-top: 1rem;
+      font-style: italic;
+      position: relative;
+    }
+
+    body.dark-mode .ai-suggestion {
+      background: linear-gradient(135deg, #2a2a3a, #1a1a2e);
+    }
+
+    .ai-suggestion::before {
+      content: "✨ AI Suggestion";
+      position: absolute;
+      top: -10px;
+      left: 10px;
+      background: var(--primary);
+      color: white;
+      padding: 2px 8px;
+      border-radius: 10px;
+      font-size: 0.7rem;
+      font-style: normal;
+    }
+
+    /* Animations */
+    .streak-fire {
+      color: var(--warning);
+      animation: pulse 1.5s infinite;
+    }
+
+    @keyframes pulse {
+      0% {
+        transform: scale(1);
+      }
+
+      50% {
+        transform: scale(1.2);
+      }
+
+      100% {
+        transform: scale(1);
+      }
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .container {
+        padding: 1.5rem;
+        margin: 1rem;
+        border-radius: 1rem;
+      }
+
+      nav {
+        flex-direction: column;
+        padding: 1rem;
+      }
+
+      nav ul {
+        margin-top: 1rem;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+
+      .feature-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .summary {
+        flex-direction: column;
+        gap: 10px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <nav>
+    <div class="logo">
+      <i class="fas fa-heartbeat"></i> WhyMe.
+    </div>
+    <ul>
+      <li><a href="home.html">Home</a></li>
+      <li><a href="wtf.html">WTF?</a></li>
+      <li><a href="comfort.html">Comfort Zone</a></li>
+      <li><a href="meme.html">Memes</a></li>
+      <li><a href="#">Bleed & Earn</a></li>
+    </ul>
+  </nav>
+
+  <div class="container">
+    <button class="dark-toggle" onclick="toggleDarkMode()">
+      <i class="fas fa-moon"></i>
+    </button>
+
+    <h1><i class="fas fa-heartbeat"></i> Bleed & Earn</h1>
+    <p>Complete self-care tasks, earn coins, and treat yourself. ₹0.5 per point earned! Redeem for real rewards or
+      donate to charity. 🎉</p>
+
+    <div class="summary">
+      <div class="summary-item">
+        <div>Today's Points</div>
+        <div class="summary-value" id="points">0</div>
+      </div>
+      <div class="summary-item">
+        <div>Total Value</div>
+        <div class="summary-value">₹<span id="rupees">0.00</span></div>
+      </div>
+      <div class="summary-item">
+        <div>Current Streak</div>
+        <div class="summary-value"><span id="streak">0</span> <i class="fas fa-fire streak-fire"></i></div>
+      </div>
+      <div class="summary-item">
+        <div>Weekly Goal</div>
+        <div class="summary-value"><span id="weeklyProgress">0</span>/7</div>
+      </div>
+    </div>
+
+    <progress id="progressBar" value="0" max="100"></progress>
+
+    <div class="feature-section">
+      <h3><i class="fas fa-tasks"></i> Today's Self-Care Tasks</h3>
+      <div class="add-task-form">
+        <input type="text" id="newTaskInput" placeholder="Add custom task...">
+        <button onclick="addCustomTask()"><i class="fas fa-plus"></i> Add</button>
+      </div>
+      <div id="taskList">
+        <!-- Tasks will be added here dynamically -->
+      </div>
+    </div>
+
+    <div class="feature-grid">
+      <div class="feature-section mood-card">
+        <h3><i class="fas fa-smile"></i> Mood Tracker</h3>
+        <div class="mood-options">
+          <button class="mood-btn angry" onclick="trackMood('angry')">😠 Angry</button>
+          <button class="mood-btn sad" onclick="trackMood('sad')">😢 Sad</button>
+          <button class="mood-btn neutral" onclick="trackMood('neutral')">😐 Neutral</button>
+          <button class="mood-btn happy" onclick="trackMood('happy')">😊 Happy</button>
+          <button class="mood-btn excited" onclick="trackMood('excited')">🤩 Excited</button>
+        </div>
+        <div id="moodHistory"></div>
+      </div>
+
+      <div class="feature-section gratitude">
+        <h3><i class="fas fa-heart"></i> Gratitude Journal</h3>
+        <button onclick="addGratitude()"><i class="fas fa-plus"></i> Add Entry</button>
+        <div id="gratitudeList"></div>
+      </div>
+
+      <div class="feature-section tip">
+        <h3><i class="fas fa-lightbulb"></i> Wellness Tip</h3>
+        <p id="wellnessTip"></p>
+        <div class="ai-suggestion" id="aiSuggestion">
+          Based on your mood, I suggest trying a 5-minute breathing exercise.
+        </div>
+      </div>
+
+      <div class="feature-section reminder">
+        <h3><i class="fas fa-bell"></i> Gentle Reminder</h3>
+        <p id="reminderText"></p>
+        <button onclick="enableNotifications()"><i class="fas fa-bell"></i> Enable Daily Reminders</button>
+      </div>
+    </div>
+
+    <div class="feature-section">
+      <h3><i class="fas fa-award"></i> Your Badges</h3>
+      <div class="badge-container" id="badgeContainer">
+        <!-- Badges will be added here dynamically -->
+      </div>
+    </div>
+
+    <div class="actions">
+      <button onclick="handleWithdraw()"><i class="fas fa-wallet"></i> Withdraw</button>
+      <button class="secondary" onclick="handleDonate()"><i class="fas fa-hand-holding-heart"></i> Donate</button>
+      <button onclick="handleMembership()"><i class="fas fa-crown"></i> Membership</button>
+      <button class="secondary" onclick="shareProgress()"><i class="fas fa-share-alt"></i> Share</button>
+      <button onclick="resetAll()"><i class="fas fa-redo"></i> Reset All</button>
+    </div>
+
+    <button class="share-btn" onclick="shareProgress()">
+      <i class="fas fa-share-alt"></i> Share Your Self-Care Progress
+    </button>
+  </div>
+
+  <script>
+    function toggleDarkMode() {
+      document.body.classList.toggle("dark-mode");
+      const icon = document.querySelector('.dark-toggle i');
+      icon.classList.toggle('fa-moon');
+      icon.classList.toggle('fa-sun');
+      localStorage.setItem("darkMode", document.body.classList.contains("dark-mode"));
+    }
+
+    // Load dark mode preference
+    document.addEventListener("DOMContentLoaded", () => {
+      const isDark = localStorage.getItem("darkMode") === "true";
+      if (isDark) {
+        document.body.classList.add("dark-mode");
+        const icon = document.querySelector('.dark-toggle i');
+        icon.classList.remove('fa-moon');
+        icon.classList.add('fa-sun');
+      }
+    });
+    // Enhanced data storage with more metrics
+    let userData = JSON.parse(localStorage.getItem("userData")) || {
+      points: 0,
+      tasks: [
+        { id: 1, text: "Say something kind 🌸", points: 1, completed: false },
+        { id: 2, text: "Go for a short walk 🚶‍♂️", points: 2, completed: false },
+        { id: 3, text: "Drink water 💧", points: 1, completed: false },
+        { id: 4, text: "Write your thoughts 📝", points: 1, completed: false },
+        { id: 5, text: "Hug your plushie 🧸", points: 1, completed: false },
+        { id: 6, text: "Voice note time 🎙️", points: 2, completed: false },
+        { id: 7, text: "Support someone 🤝", points: 2, completed: false },
+        { id: 8, text: "Warm drink break ☕", points: 1, completed: false },
+        { id: 9, text: "Social detox 📵", points: 3, completed: false }
+      ],
+      customTasks: [],
+      moodHistory: [],
+      gratitudeEntries: [],
+      lastActiveDate: null,
+      streak: 0,
+      weeklyProgress: 0,
+      badges: [1] // Start with Newbie badge
+    };
+
+    // Wellness content
+    const tips = [
+      "Rest is productive 💕",
+      "Stretch your neck & back 🧘",
+      "Breathe deeply 😌",
+      "You deserve kindness ❤",
+      "Hydration boosts mood 💦",
+      "Small steps still move you forward 🐢",
+      "Your feelings are valid 💯"
+    ];
+
+    const reminders = [
+      "Change your pad 🩸",
+      "Drink more water 💧",
+      "Relax your shoulders",
+      "Deep breath now",
+      "Check your posture 🪑",
+      "Take your meds 💊",
+      "Stretch for 2 minutes 🧘‍♀️"
+    ];
+
+    const moodSuggestions = {
+      angry: "Try a quick burst of physical activity to release tension. 💪",
+      sad: "Reach out to someone you trust or write about your feelings. 📝",
+      neutral: "A short walk outside might help shift your energy. 🌳",
+      happy: "Savor this moment and share your joy with someone! ✨",
+      excited: "Channel this energy into something creative! 🎨"
+    };
+
+    const badges = [
+      { id: 1, name: "Newbie", icon: "🥚", earned: true },
+      { id: 2, name: "Streak Starter", icon: "🔥", earned: false },
+      { id: 3, name: "Self-Care Pro", icon: "🦸‍♀️", earned: false },
+      { id: 4, name: "Mood Tracker", icon: "📊", earned: false },
+      { id: 5, name: "Gratitude Guru", icon: "🙏", earned: false },
+      { id: 6, name: "Weekly Champion", icon: "🏆", earned: false }
+    ];
+
+    // Initialize the app
+    document.addEventListener("DOMContentLoaded", () => {
+      updateUI();
+      checkStreak();
+      checkBadges();
+
+      // Set random tip and reminder
+      document.getElementById('wellnessTip').innerText = tips[Math.floor(Math.random() * tips.length)];
+      document.getElementById('reminderText').innerText = reminders[Math.floor(Math.random() * reminders.length)];
+
+      // Check for notification permission
+      if (Notification.permission === "granted") {
+        scheduleDailyReminder();
+      }
+
+      // Load dark mode preference
+      if (localStorage.getItem("darkMode") === "true") {
+        document.body.classList.add("dark-mode");
+        document.querySelector('.dark-toggle i').classList.replace('fa-moon', 'fa-sun');
+      }
+    });
+
+    // Update all UI elements
+    function updateUI() {
+      // Update points and money
+      document.getElementById('points').innerText = userData.points;
+      document.getElementById('rupees').innerText = (userData.points * 0.5).toFixed(2);
+      document.getElementById('progressBar').value = userData.points;
+      document.getElementById('streak').innerText = userData.streak;
+      document.getElementById('weeklyProgress').innerText = userData.weeklyProgress;
+
+      // Render tasks
+      const taskList = document.getElementById('taskList');
+      taskList.innerHTML = '';
+
+      // Combine default and custom tasks
+      const allTasks = [...userData.tasks, ...userData.customTasks];
+
+      allTasks.forEach(task => {
+        const taskElement = document.createElement('div');
+        taskElement.className = 'task';
+        taskElement.innerHTML = `
+          <input type="checkbox" id="task-${task.id}" ${task.completed ? 'checked' : ''}>
+          <label for="task-${task.id}">${task.text}</label>
+          <span class="task-points">+${task.points}</span>
+          ${task.id > 9 ? `<button onclick="removeTask(${task.id})" style="background: none; border: none; color: #ff6b6b; cursor: pointer;"><i class="fas fa-trash"></i></button>` : ''}
+        `;
+
+        taskElement.querySelector('input').addEventListener('change', () => toggleTask(task.id));
+        taskList.appendChild(taskElement);
+      });
+
+      // Render mood history
+      const moodHistory = document.getElementById('moodHistory');
+      if (userData.moodHistory.length > 0) {
+        const lastMood = userData.moodHistory[userData.moodHistory.length - 1];
+        moodHistory.innerHTML = `
+          <p>Your recent mood: <span style="font-size: 1.2rem;">${getMoodEmoji(lastMood.mood)}</span> ${lastMood.mood.charAt(0).toUpperCase() + lastMood.mood.slice(1)}</p>
+          <small>${new Date(lastMood.date).toLocaleString()}</small>
+        `;
+
+        // Update AI suggestion based on mood
+        document.getElementById('aiSuggestion').innerText = moodSuggestions[lastMood.mood] || "I suggest taking a moment to reflect on how you're feeling.";
+      } else {
+        moodHistory.innerHTML = '<p>Track your mood to see patterns over time</p>';
+      }
+
+      // Render gratitude entries
+      const gratitudeList = document.getElementById('gratitudeList');
+      gratitudeList.innerHTML = '';
+
+      if (userData.gratitudeEntries.length > 0) {
+        userData.gratitudeEntries.forEach((entry, index) => {
+          const entryElement = document.createElement('div');
+          entryElement.className = 'gratitude-item';
+          entryElement.innerHTML = `
+            <span>${entry.text}</span>
+            <button onclick="removeGratitude(${index})"><i class="fas fa-times"></i></button>
+          `;
+          gratitudeList.appendChild(entryElement);
+        });
+      } else {
+        gratitudeList.innerHTML = '<p>No entries yet. Add something you\'re grateful for!</p>';
+      }
+
+      // Save updated data
+      localStorage.setItem("userData", JSON.stringify(userData));
+    }
+
+    // Task management
+    function toggleTask(taskId) {
+      const task = [...userData.tasks, ...userData.customTasks].find(t => t.id === taskId);
+      if (task) {
+        // Update points
+        if (task.completed) {
+          userData.points -= task.points;
+        } else {
+          userData.points += task.points;
+          userData.weeklyProgress = Math.min(userData.weeklyProgress + 1, 7);
+        }
+
+        task.completed = !task.completed;
+        updateUI();
+        checkBadges();
+      }
+    }
+
+    function addCustomTask() {
+      const input = document.getElementById('newTaskInput');
+      const taskText = input.value.trim();
+
+      if (taskText) {
+        const newTask = {
+          id: Date.now(),
+          text: taskText,
+          points: 1,
+          completed: false
+        };
+
+        userData.customTasks.push(newTask);
+        input.value = '';
+        updateUI();
+      }
+    }
+
+    function removeTask(taskId) {
+      userData.customTasks = userData.customTasks.filter(task => task.id !== taskId);
+      updateUI();
+    }
+
+    // Mood tracking
+    function trackMood(mood) {
+      // Reset all mood buttons
+      document.querySelectorAll('.mood-btn').forEach(btn => {
+        btn.classList.remove('selected');
+      });
+
+      // Highlight selected mood
+      event.target.classList.add('selected');
+
+      // Add to mood history
+      userData.moodHistory.push({
+        mood: mood,
+        date: new Date().toISOString()
+      });
+
+      // Limit history to last 30 entries
+      if (userData.moodHistory.length > 30) {
+        userData.moodHistory.shift();
+      }
+
+      updateUI();
+    }
+
+    function getMoodEmoji(mood) {
+      const emojis = {
+        angry: "😠",
+        sad: "😢",
+        neutral: "😐",
+        happy: "😊",
+        excited: "🤩"
+      };
+      return emojis[mood] || "😶";
+    }
+
+    // Gratitude journal
+    function addGratitude() {
+      const entry = prompt("What are you grateful for today?");
+      if (entry) {
+        userData.gratitudeEntries.push({
+          text: entry,
+          date: new Date().toISOString()
+        });
+
+        // Add points for gratitude entry
+        userData.points += 1;
+        updateUI();
+        checkBadges();
+      }
+    }
+
+    function removeGratitude(index) {
+      userData.gratitudeEntries.splice(index, 1);
+      updateUI();
+    }
+
+    // Streak tracking
+    function checkStreak() {
+      const today = new Date().toDateString();
+      const lastDate = userData.lastActiveDate ? new Date(userData.lastActiveDate).toDateString() : null;
+
+      if (lastDate === today) {
+        return; // Already logged today
+      }
+
+      const yesterday = new Date();
+      yesterday.setDate(yesterday.getDate() - 1);
+
+      if (lastDate === yesterday.toDateString()) {
+        // Consecutive day
+        userData.streak += 1;
+      } else if (!lastDate) {
+        // First time
+        userData.streak = 1;
+      } else {
+        // Broken streak
+        userData.streak = 1;
+      }
+
+      userData.lastActiveDate = new Date().toISOString();
+      updateUI();
+      checkBadges();
+    }
+
+    // Badge system
+    function checkBadges() {
+      // Streak Starter badge
+      if (userData.streak >= 3 && !userData.badges.includes(2)) {
+        userData.badges.push(2);
+        showBadgeNotification("Streak Starter", "🔥");
+      }
+
+      // Self-Care Pro badge
+      if (userData.points >= 20 && !userData.badges.includes(3)) {
+        userData.badges.push(3);
+        showBadgeNotification("Self-Care Pro", "🦸‍♀️");
+      }
+
+      // Mood Tracker badge
+      if (userData.moodHistory.length >= 5 && !userData.badges.includes(4)) {
+        userData.badges.push(4);
+        showBadgeNotification("Mood Tracker", "📊");
+      }
+
+      // Gratitude Guru badge
+      if (userData.gratitudeEntries.length >= 5 && !userData.badges.includes(5)) {
+        userData.badges.push(5);
+        showBadgeNotification("Gratitude Guru", "🙏");
+      }
+
+      // Weekly Champion badge
+      if (userData.weeklyProgress >= 7 && !userData.badges.includes(6)) {
+        userData.badges.push(6);
+        showBadgeNotification("Weekly Champion", "🏆");
+      }
+
+      // Update badge display
+      const badgeContainer = document.getElementById('badgeContainer');
+      badgeContainer.innerHTML = '';
+
+      badges.forEach(badge => {
+        if (userData.badges.includes(badge.id)) {
+          const badgeElement = document.createElement('div');
+          badgeElement.className = 'badge-item';
+          badgeElement.innerHTML = `${badge.icon} ${badge.name}`;
+          badgeContainer.appendChild(badgeElement);
+        }
+      });
+    }
+
+    function showBadgeNotification(name, icon) {
+      alert(`🎉 You earned the ${name} badge! ${icon}\nKeep up the great self-care work!`);
+    }
+
+    // Reward actions
+    function handleWithdraw() {
+      if (userData.points > 0) {
+        alert(`💰 Withdrew ₹${(userData.points * 0.5).toFixed(2)} to your account!`);
+        userData.points = 0;
+        updateUI();
+      } else {
+        alert("You don't have any points to withdraw yet. Complete some self-care tasks first!");
+      }
+    }
+
+    function handleDonate() {
+      if (userData.points > 0) {
+        alert(`❤️ Donated ₹${(userData.points * 0.5).toFixed(2)} to mental health charities! Thank you!`);
+        userData.points = 0;
+        updateUI();
+      } else {
+        alert("You don't have any points to donate yet. Complete some self-care tasks first!");
+      }
+    }
+
+    function handleMembership() {
+      if (userData.points >= 10) {
+        alert(`🎁 Redeemed ${userData.points} points for premium membership! Enjoy your benefits!`);
+        userData.points -= 10;
+        updateUI();
+      } else {
+        alert(`You need at least 10 points (₹5.00) for membership. You have ${userData.points} points now.`);
+      }
+    }
+
+    function shareProgress() {
+      const shareText = `I've earned ${userData.points} self-care points (₹${(userData.points * 0.5).toFixed(2)}) on WhyMe today! 💖\n\nJoin me in prioritizing mental health: ${window.location.href}`;
+
+      if (navigator.share) {
+        navigator.share({
+          title: 'My Self-Care Progress',
+          text: shareText,
+          url: window.location.href
+        }).catch(err => {
+          console.log('Error sharing:', err);
+          fallbackShare(shareText);
+        });
+      } else {
+        fallbackShare(shareText);
+      }
+    }
+
+    function fallbackShare(text) {
+      // Try to copy to clipboard
+      navigator.clipboard.writeText(text).then(() => {
+        alert('Copied to clipboard! Paste to share your progress.');
+      }).catch(() => {
+        // Final fallback
+        prompt("Copy this to share:", text);
+      });
+    }
+
+    // Notifications
+    function enableNotifications() {
+      if (Notification.permission === "granted") {
+        scheduleDailyReminder();
+        alert("You'll now receive daily self-care reminders!");
+      } else if (Notification.permission !== "denied") {
+        Notification.requestPermission().then(permission => {
+          if (permission === "granted") {
+            scheduleDailyReminder();
+            alert("You'll now receive daily self-care reminders!");
+          }
+        });
+      } else {
+        alert("Notification permission was denied. Please enable it in your browser settings.");
+      }
+    }
+
+    function scheduleDailyReminder() {
+      // Clear any existing notifications
+      if (window.selfCareNotification) {
+        clearTimeout(window.selfCareNotification);
+      }
+
+      // Schedule for 2pm every day
+      const now = new Date();
+      const targetTime = new Date(
+        now.getFullYear(),
+        now.getMonth(),
+        now.getDate(),
+        14, 0, 0
+      );
+
+      // If it's already past 2pm,
+    }
+    function scheduleDailyReminder() {
+      // Clear any existing notifications
+      if (window.selfCareNotification) {
+        clearTimeout(window.selfCareNotification);
+      }
+
+      const now = new Date();
+      const targetTime = new Date(
+        now.getFullYear(),
+        now.getMonth(),
+        now.getDate(),
+        14, 0, 0 // 2:00 PM
+      );
+
+      // If it's already past 2pm today, schedule for 2pm tomorrow
+      if (now.getTime() > targetTime.getTime()) {
+        targetTime.setDate(targetTime.getDate() + 1);
+      }
+
+      const timeoutDuration = targetTime.getTime() - now.getTime();
+
+      window.selfCareNotification = setTimeout(() => {
+        new Notification("💖 Gentle Self-Care Reminder", {
+          body: "Take a few minutes for yourself. You deserve care every day 💆‍♀️✨",
+          icon: "https://cdn-icons-png.flaticon.com/512/2976/2976215.png"
+        });
+
+        // Schedule the next day’s reminder again
+        scheduleDailyReminder();
+      }, timeoutDuration);
+    }
+  </script>
+</body>
+
+</html>

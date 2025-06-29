@@ -1,0 +1,998 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>WhyMe — Panic Room</title>
+  <link href="https://fonts.googleapis.com/css2?family=Comfortaa&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Comfortaa', cursive;
+      background: linear-gradient(to bottom right, #ffe4ec, #f3d8fc);
+      transition: background 1s ease;
+      min-height: 100vh;
+      position: relative;
+    }
+
+    .sweet-mode {
+      background: linear-gradient(to bottom right, #cceeff, #f3e0ff) !important;
+    }
+
+    .fade {
+      animation: fadeIn 0.8s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .confetti {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 10000;
+    }
+
+    .confetti span {
+      position: absolute;
+      display: block;
+      width: 10px;
+      height: 10px;
+      background: red;
+      animation: fall 3s linear infinite;
+    }
+
+    @keyframes fall {
+      to {
+        transform: translateY(100vh) rotate(360deg);
+        opacity: 0;
+      }
+    }
+
+    .break-countdown {
+      font-size: 2rem;
+      font-weight: bold;
+      margin: 1rem auto;
+      animation: pulse 1s infinite alternate;
+    }
+
+    @keyframes pulse {
+      from {
+        transform: scale(1);
+        opacity: 1;
+      }
+
+      to {
+        transform: scale(1.1);
+        opacity: 0.7;
+      }
+    }
+
+    /* Navigation Styles */
+    nav {
+      background-color: #ff6b81;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 30px;
+      color: white;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    nav .logo {
+      font-size: 1.8rem;
+      font-weight: bold;
+      text-shadow: 1px 1px #e84a5f;
+      transition: transform 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    nav .logo:hover {
+      transform: scale(1.05);
+    }
+
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 20px;
+    }
+
+    nav ul li a {
+      text-decoration: none;
+      color: white;
+      font-weight: 500;
+      position: relative;
+      padding: 5px 10px;
+      transition: all 0.3s ease;
+    }
+
+    nav ul li a::before {
+      content: "";
+      position: absolute;
+      width: 0;
+      height: 2px;
+      bottom: 0;
+      left: 0;
+      background-color: white;
+      transition: all 0.3s ease;
+    }
+
+    nav ul li a:hover::before {
+      width: 100%;
+    }
+
+    nav ul li a::after {
+      content: "";
+      position: absolute;
+      width: 0;
+      height: 2px;
+      top: 0;
+      right: 0;
+      background-color: white;
+      transition: all 0.3s ease;
+    }
+
+    nav ul li a:hover::after {
+      width: 100%;
+    }
+
+    nav ul li a:hover {
+      transform: translateY(-3px);
+      text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+    }
+
+    /* Dark Mode Toggle */
+    .dark-toggle {
+      position: absolute;
+      top: 1.5rem;
+      right: 1.5rem;
+      background: var(--primary);
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+      transition: all 0.3s ease;
+      z-index: 1001;
+    }
+
+    main {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding-bottom: 2rem;
+    }
+
+    .panic-room,
+    .journal-box,
+    .quote-box,
+    .resources-box,
+    .break-timer,
+    .mood-history,
+    .mini-journal-container,
+    .weather-box,
+    .streak-box {
+      background: rgba(255, 255, 255, 0.6);
+      backdrop-filter: blur(10px);
+      border-radius: 2rem;
+      box-shadow: 0 25px 50px rgba(255, 0, 85, 0.1);
+      text-align: center;
+      margin: 2rem auto;
+      padding: 2rem;
+      width: 90%;
+      max-width: 500px;
+    }
+
+    .resources-box li {
+      list-style: none;
+      text-decoration: none;
+    }
+
+    .resources-box a {
+      text-decoration: none;
+      color: black;
+    }
+
+    .circle {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: radial-gradient(circle at center, #ffb6c1, #ff91a4);
+      animation: breathePulse 5s ease-in-out infinite;
+      margin: 1rem auto;
+    }
+
+    @keyframes breathePulse {
+      0% {
+        transform: scale(1);
+        opacity: 0.7;
+      }
+
+      50% {
+        transform: scale(1.4);
+        opacity: 1;
+      }
+
+      100% {
+        transform: scale(1);
+        opacity: 0.7;
+      }
+    }
+
+    .hug-btn,
+    .journal-box button,
+    .break-timer button,
+    .reset-history,
+    .mini-journal-btn,
+    .voice-btn {
+      background: linear-gradient(to right, #ff7aa5, #e84a5f);
+      border: none;
+      padding: 0.8rem 1.2rem;
+      font-size: 1rem;
+      border-radius: 2rem;
+      color: white;
+      cursor: pointer;
+      margin: 1rem 0;
+      transition: transform 0.3s ease;
+    }
+
+    .hug-btn:hover,
+    .journal-box button:hover,
+    .break-timer button:hover,
+    .reset-history:hover,
+    .mini-journal-btn:hover,
+    .voice-btn:hover {
+      transform: scale(1.05);
+    }
+
+    .note-display {
+      background: #fff0f5;
+      padding: 0.6rem 1rem;
+      border-left: 4px solid #ff85a2;
+      border-radius: 0.5rem;
+      color: #444;
+      margin-top: 1rem;
+    }
+
+    .mood-buttons button {
+      font-size: 1.5rem;
+      background: none;
+      border: none;
+      margin: 0.5rem;
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+
+    .mood-buttons button:hover {
+      transform: scale(1.3);
+    }
+
+    .mode-toggle {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      padding: 0.4rem 1rem;
+      background: #fff;
+      border-radius: 1rem;
+      font-size: 0.8rem;
+      cursor: pointer;
+      border: 1px solid #ccc;
+    }
+
+    .footer {
+      text-align: center;
+      padding: 1rem;
+      font-size: 0.8rem;
+      color: #999;
+    }
+
+    /* Mini Journal Styles */
+    .mini-journal {
+      width: 100%;
+      background: linear-gradient(135deg, #fff5f5, #f8f5ff);
+      border-radius: 20px;
+      padding: 20px;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.3s ease;
+    }
+
+    .mini-journal:hover {
+      transform: translateY(-5px);
+    }
+
+    .mini-journal::before {
+      content: "";
+      position: absolute;
+      top: -10px;
+      right: -10px;
+      width: 50px;
+      height: 50px;
+      background-color: #ffd6e7;
+      border-radius: 50%;
+      opacity: 0.3;
+    }
+
+    .journal-header {
+      text-align: center;
+      margin-bottom: 15px;
+      color: #ff85a2;
+    }
+
+    .journal-header h3 {
+      font-size: 1.2rem;
+      margin-bottom: 5px;
+    }
+
+    .mini-prompt {
+      font-size: 0.9rem;
+      color: #9d7ec2;
+      min-height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 10px 0;
+      padding: 8px;
+      background-color: rgba(255, 255, 255, 0.6);
+      border-radius: 10px;
+      transition: all 0.3s ease;
+    }
+
+    .mini-prompt:hover {
+      background-color: rgba(255, 255, 255, 0.8);
+    }
+
+    .mini-entry {
+      width: 100%;
+      height: 60px;
+      padding: 10px;
+      border: 2px solid #e0c8f1;
+      border-radius: 15px;
+      resize: none;
+      font-size: 0.9rem;
+      color: #6a5b7a;
+      background-color: rgba(255, 255, 255, 0.7);
+      margin-bottom: 10px;
+      transition: border-color 0.3s ease;
+    }
+
+    .mini-entry:focus {
+      outline: none;
+      border-color: #c8a2f1;
+      background-color: rgba(255, 255, 255, 0.9);
+    }
+
+    .mini-emoji-picker {
+      display: flex;
+      justify-content: space-around;
+      margin-bottom: 10px;
+      flex-wrap: wrap;
+    }
+
+    .mini-emoji-btn {
+      background: none;
+      border: none;
+      font-size: 1.2rem;
+      cursor: pointer;
+      padding: 3px;
+      transition: transform 0.2s ease;
+    }
+
+    .mini-emoji-btn:hover {
+      transform: scale(1.3);
+    }
+
+    .mini-save-btn {
+      width: 100%;
+      padding: 8px;
+      border: none;
+      border-radius: 50px;
+      background: linear-gradient(to right, #ff9bb8, #c8a2f1);
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 5px 15px rgba(200, 162, 241, 0.3);
+    }
+
+    .mini-save-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 7px 20px rgba(200, 162, 241, 0.4);
+    }
+
+    .mini-saved-message {
+      text-align: center;
+      margin-top: 5px;
+      font-size: 0.7rem;
+      color: #9d7ec2;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    /* Weather Box */
+    .weather-display {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      font-size: 1.2rem;
+      margin: 10px 0;
+    }
+
+    .weather-icon {
+      font-size: 2rem;
+    }
+
+    /* Streak Box */
+    .streak-display {
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: #ff6b81;
+      margin: 10px 0;
+    }
+
+    /* Mood Suggestions */
+    .mood-suggestion {
+      background: #fff0f5;
+      padding: 10px;
+      border-radius: 10px;
+      margin-top: 10px;
+      font-size: 0.9rem;
+    }
+
+    /* Voice Journal */
+    .voice-controls {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .recording-indicator {
+      display: none;
+      color: #e84a5f;
+      font-size: 0.8rem;
+      margin-top: 5px;
+    }
+
+    @keyframes pulse {
+      0% {
+        opacity: 0.6;
+      }
+
+      50% {
+        opacity: 1;
+      }
+
+      100% {
+        opacity: 0.6;
+      }
+    }
+
+    .recording {
+      animation: pulse 1.5s infinite;
+    }
+  </style>
+</head>
+
+<body>
+  <nav>
+    <div class="logo">
+      <i class="fas fa-heartbeat"></i> WhyMe.
+    </div>
+    <ul>
+      <li><a href="home.html">Home</a></li>
+      <li><a href="wtf.html">WTF?</a></li>
+      <li><a href="comfort.html">Comfort Zone</a></li>
+      <li><a href="meme.html">Memes</a></li>
+      <li><a href="bleed.html">Bleed & Earn</a></li>
+    </ul>
+  </nav>
+
+  <main>
+    <div class="panic-room">
+      <div class="mode-toggle">🌙 Sweet Comfort Mode</div>
+      <h1 class="panic-header">😭 I'm Panicking...</h1>
+      <div class="circle"></div>
+      <button class="hug-btn" onclick="giveHug()">🤗 Give Myself a Hug</button>
+      <div class="note-display" id="hugMessage"></div>
+
+      <div class="mood-buttons">
+        <p>Tap your mood:</p>
+        <button onclick="logMood('🥺')">🥺</button>
+        <button onclick="logMood('😟')">😟</button>
+        <button onclick="logMood('😐')">😐</button>
+        <button onclick="logMood('😊')">😊</button>
+        <button onclick="logMood('😍')">😍</button>
+      </div>
+      <div class="mood-suggestion" id="moodSuggestion"></div>
+    </div>
+
+    <div class="mini-journal-container">
+      <div class="mini-journal">
+        <div class="journal-header">
+          <h3>🌷 Mini Journal</h3>
+          <p>Quick thoughts & memories</p>
+        </div>
+
+        <div class="mini-prompt" id="miniPrompt">Today I'm grateful for...</div>
+
+        <textarea class="mini-entry" id="miniEntry" placeholder="Write your thought here... ✨"></textarea>
+
+        <div class="mini-emoji-picker">
+          <button class="mini-emoji-btn" onclick="addMiniEmoji('😊')">😊</button>
+          <button class="mini-emoji-btn" onclick="addMiniEmoji('🌸')">🌸</button>
+          <button class="mini-emoji-btn" onclick="addMiniEmoji('☀️')">☀️</button>
+          <button class="mini-emoji-btn" onclick="addMiniEmoji('🌈')">🌈</button>
+          <button class="mini-emoji-btn" onclick="addMiniEmoji('💖')">💖</button>
+          <button class="mini-emoji-btn" onclick="addMiniEmoji('📚')">📚</button>
+          <button class="mini-emoji-btn" onclick="addMiniEmoji('🍵')">🍵</button>
+          <button class="mini-emoji-btn" onclick="addMiniEmoji('🎶')">🎶</button>
+        </div>
+
+        <div class="voice-controls">
+          <button class="voice-btn" id="recordButton" onclick="toggleRecording()">🎤 Record Voice</button>
+        </div>
+        <div class="recording-indicator" id="recordingIndicator">● Recording...</div>
+
+        <button class="mini-save-btn" onclick="saveMiniEntry()">Save Mini Entry</button>
+        <div class="mini-saved-message" id="miniSavedMessage"></div>
+      </div>
+    </div>
+
+    <div class="weather-box">
+      <h3>⛅ Current Weather</h3>
+      <div class="weather-display" id="weatherDisplay">
+        <div class="weather-icon">🌤️</div>
+        <div id="weatherText">Loading weather...</div>
+      </div>
+    </div>
+
+    <div class="streak-box">
+      <h3>🔥 Your Streak</h3>
+      <div class="streak-display" id="streakDisplay">0 days</div>
+      <p>Keep using WhyMe daily to build your streak!</p>
+    </div>
+
+    <div class="journal-box">
+      <h3>📝 Full Journal</h3>
+      <textarea rows="5" id="journalEntry" placeholder="Express yourself fully here..."></textarea>
+      <button onclick="saveJournal()">Save Journal</button>
+    </div>
+
+    <div class="quote-box">
+      <h3>🌼 Daily Quote</h3>
+      <blockquote id="quote" class="fade">You are enough. Just as you are. 💖</blockquote>
+    </div>
+
+    <div class="resources-box">
+      <h3>🧠 Mental Health Resources</h3>
+      <ul>
+        <li><a href="https://www.headspace.com/" target="_blank">Headspace</a></li>
+        <li><a href="https://www.7cups.com/" target="_blank">7 Cups</a></li>
+        <li><a href="https://www.talkspace.com/" target="_blank">Talkspace</a></li>
+        <li><a href="https://www.crisistextline.org/" target="_blank">Crisis Text Line</a></li>
+      </ul>
+    </div>
+
+    <div class="break-timer">
+      <h3>⏳ Take a 1-Minute Break</h3>
+      <div class="break-countdown" id="breakCountdown">60</div>
+      <button onclick="startBreak()">Start Timer</button>
+    </div>
+
+    <div class="mood-history">
+      <h3>📅 Your Mood Log</h3>
+      <ul id="moodLog"></ul>
+      <button class="reset-history" onclick="resetMoodLog()">Reset Log</button>
+    </div>
+  </main>
+
+  <footer class="footer">
+    &copy; 2025 WhyMe. Made with ❤️ for every mood.
+  </footer>
+
+  <script>
+    // Quotes for rotation
+    const quotes = [
+      "You are enough. Just as you are. 💖",
+      "Even on hard days, you shine. 🌟",
+      "It's okay to rest. You deserve peace. 🌈",
+      "Your feelings are valid. Always. 💬",
+      "Keep going. You've got this. 💪",
+      "Progress, not perfection. 🌱",
+      "Be gentle with yourself today. 🕊️",
+      "This feeling is temporary. 🌦️"
+    ];
+
+    // Gratitude prompts for mini journal
+    const miniPrompts = [
+      "Today I'm grateful for...",
+      "Something that made me smile today...",
+      "A small joy I noticed...",
+      "Someone who brightened my day...",
+      "A beautiful moment I experienced...",
+      "Something I learned today...",
+      "A challenge I overcame...",
+      "Something I'm looking forward to..."
+    ];
+
+    // Mood suggestions
+    const moodSuggestions = {
+      "🥺": "Take 3 deep breaths. Inhale for 4 counts, hold for 4, exhale for 6.",
+      "😟": "Try the 5-4-3-2-1 grounding technique: Name 5 things you see, 4 you feel, 3 you hear, 2 you smell, 1 you taste.",
+      "😐": "Maybe a short walk or stretch would help? Even just standing up can change your perspective.",
+      "😊": "Nice! Enjoy this moment. Consider journaling about what's making you feel good.",
+      "😍": "Wonderful! Spread the joy - share your happiness with someone else today!"
+    };
+
+    // Weather emoji map
+    const weatherEmoji = {
+      "clear": "☀️",
+      "clouds": "☁️",
+      "rain": "🌧️",
+      "thunderstorm": "⛈️",
+      "snow": "❄️",
+      "mist": "🌫️",
+      "default": "🌤️"
+    };
+
+    // Initialize variables
+    let quoteIndex = 0;
+    let miniPromptIndex = 0;
+    let isRecording = false;
+    let mediaRecorder;
+    let audioChunks = [];
+    let lastActivityDate = null;
+    let currentStreak = 0;
+
+    // DOM elements
+    const quoteElement = document.getElementById('quote');
+    const miniPromptElement = document.getElementById('miniPrompt');
+    const moodSuggestionElement = document.getElementById('moodSuggestion');
+    const weatherDisplay = document.getElementById('weatherDisplay');
+    const weatherText = document.getElementById('weatherText');
+    const streakDisplay = document.getElementById('streakDisplay');
+    const recordButton = document.getElementById('recordButton');
+    const recordingIndicator = document.getElementById('recordingIndicator');
+
+    // Rotate quotes every 5 seconds
+    function rotateQuotes() {
+      quoteIndex = (quoteIndex + 1) % quotes.length;
+      quoteElement.classList.remove('fade');
+      setTimeout(() => {
+        quoteElement.textContent = quotes[quoteIndex];
+        quoteElement.classList.add('fade');
+      }, 200);
+    }
+
+    // Rotate mini journal prompts every 5 seconds
+    function rotateMiniPrompts() {
+      miniPromptIndex = (miniPromptIndex + 1) % miniPrompts.length;
+      miniPromptElement.textContent = miniPrompts[miniPromptIndex];
+      miniPromptElement.classList.add('fade-in');
+      setTimeout(() => miniPromptElement.classList.remove('fade-in'), 500);
+    }
+
+    // Initialize quote rotation
+    setInterval(rotateQuotes, 5000);
+    setInterval(rotateMiniPrompts, 5000);
+
+    // Journal functions
+    const journalTextArea = document.getElementById('journalEntry');
+    const miniEntry = document.getElementById('miniEntry');
+
+    function saveJournal() {
+      const entry = journalTextArea.value;
+      if (entry.trim() === "") {
+        alert("Write something first! ✏️");
+        return;
+      }
+
+      const entries = JSON.parse(localStorage.getItem('journalEntries') || '[]');
+      entries.push({
+        date: new Date().toLocaleString(),
+        content: entry
+      });
+
+      localStorage.setItem('journalEntries', JSON.stringify(entries));
+      alert('Journal entry saved! 📝');
+      updateStreak();
+    }
+
+    function saveMiniEntry() {
+      const entry = miniEntry.value;
+      if (entry.trim() === "") {
+        showMiniMessage("Write something first! ✏️");
+        return;
+      }
+
+      const entries = JSON.parse(localStorage.getItem('miniJournalEntries') || '[]');
+      entries.push({
+        date: new Date().toLocaleString(),
+        content: entry,
+        prompt: miniPromptElement.textContent
+      });
+
+      localStorage.setItem('miniJournalEntries', JSON.stringify(entries));
+      miniEntry.value = "";
+      showMiniMessage("Saved! 💾");
+      updateStreak();
+    }
+
+    function showMiniMessage(msg) {
+      const messageElement = document.getElementById('miniSavedMessage');
+      messageElement.textContent = msg;
+      messageElement.style.opacity = 1;
+
+      setTimeout(() => {
+        messageElement.style.opacity = 0;
+      }, 3000);
+    }
+
+    function addMiniEmoji(emoji) {
+      const startPos = miniEntry.selectionStart;
+      const endPos = miniEntry.selectionEnd;
+      const text = miniEntry.value;
+
+      miniEntry.value = text.substring(0, startPos) + emoji + text.substring(endPos);
+      miniEntry.focus();
+      miniEntry.selectionStart = startPos + emoji.length;
+      miniEntry.selectionEnd = startPos + emoji.length;
+    }
+
+    // Voice recording functions
+    async function toggleRecording() {
+      if (!isRecording) {
+        try {
+          const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+          mediaRecorder = new MediaRecorder(stream);
+          audioChunks = [];
+
+          mediaRecorder.ondataavailable = event => {
+            audioChunks.push(event.data);
+          };
+
+          mediaRecorder.onstop = () => {
+            const audioBlob = new Blob(audioChunks, { type: 'audio/mp3' });
+            saveAudioNote(audioBlob);
+          };
+
+          mediaRecorder.start();
+          isRecording = true;
+          recordButton.textContent = "⏹️ Stop Recording";
+          recordingIndicator.style.display = 'block';
+          recordingIndicator.classList.add('recording');
+        } catch (err) {
+          console.error("Error accessing microphone:", err);
+          alert("Couldn't access microphone. Please check permissions.");
+        }
+      } else {
+        mediaRecorder.stop();
+        isRecording = false;
+        recordButton.textContent = "🎤 Record Voice";
+        recordingIndicator.style.display = 'none';
+        recordingIndicator.classList.remove('recording');
+
+        // Stop all tracks
+        mediaRecorder.stream.getTracks().forEach(track => track.stop());
+      }
+    }
+
+    function saveAudioNote(audioBlob) {
+      const reader = new FileReader();
+      reader.readAsDataURL(audioBlob);
+      reader.onloadend = () => {
+        const base64data = reader.result;
+        const audioNotes = JSON.parse(localStorage.getItem('audioNotes') || []);
+        audioNotes.push({
+          date: new Date().toLocaleString(),
+          audio: base64data
+        });
+        localStorage.setItem('audioNotes', JSON.stringify(audioNotes));
+        showMiniMessage("Voice note saved! 🎙️");
+        updateStreak();
+      };
+    }
+
+    // Mood tracking functions
+    function logMood(emoji) {
+      const log = JSON.parse(localStorage.getItem('moodLog') || '[]');
+      const date = new Date().toLocaleString();
+      log.push(`${emoji} - ${date}`);
+      localStorage.setItem('moodLog', JSON.stringify(log));
+      loadMoodLog();
+
+      // Show mood-specific suggestion
+      moodSuggestionElement.textContent = moodSuggestions[emoji] || "";
+      moodSuggestionElement.style.display = "block";
+
+      // Update streak
+      updateStreak();
+    }
+
+    function loadMoodLog() {
+      const list = document.getElementById('moodLog');
+      const log = JSON.parse(localStorage.getItem('moodLog') || '[]');
+      list.innerHTML = log.reverse().map(entry => `<li>${entry}</li>`).join('');
+    }
+
+    function resetMoodLog() {
+      if (confirm('Clear mood history?')) {
+        localStorage.removeItem('moodLog');
+        loadMoodLog();
+      }
+    }
+
+    // Hug function with confetti
+    function giveHug() {
+      const msg = document.getElementById('hugMessage');
+      msg.innerText = "💞 That's love. You're doing amazing.";
+      msg.classList.add('fade');
+      launchConfetti();
+      updateStreak();
+    }
+
+    function launchConfetti() {
+      const container = document.createElement('div');
+      container.classList.add('confetti');
+      document.body.appendChild(container);
+
+      for (let i = 0; i < 100; i++) {
+        const confetto = document.createElement('span');
+        confetto.style.left = Math.random() * 100 + '%';
+        confetto.style.top = Math.random() * -20 + 'px';
+        confetto.style.backgroundColor = `hsl(${Math.random() * 360}, 100%, 70%)`;
+        confetto.style.animationDelay = (Math.random() * 3) + 's';
+        confetto.style.width = '8px';
+        confetto.style.height = '8px';
+        confetto.style.position = 'absolute';
+        confetto.style.borderRadius = '50%';
+        container.appendChild(confetto);
+      }
+
+      setTimeout(() => {
+        document.body.removeChild(container);
+      }, 4000);
+    }
+
+    // Break timer function
+    function startBreak() {
+      let countdown = 60;
+      const display = document.getElementById('breakCountdown');
+      const interval = setInterval(() => {
+        countdown--;
+        display.textContent = countdown;
+        if (countdown <= 0) {
+          clearInterval(interval);
+          alert("Break's over! You did great! ✨");
+          display.textContent = "60";
+        }
+      }, 1000);
+    }
+
+    // Theme toggle
+    document.querySelector('.mode-toggle').addEventListener('click', () => {
+      document.body.classList.toggle('sweet-mode');
+      document.querySelector('.mode-toggle').textContent =
+        document.body.classList.contains('sweet-mode')
+          ? '☀️ Panic Mode'
+          : '🌙 Sweet Comfort Mode';
+    });
+
+    // Weather function
+    async function fetchWeather() {
+      try {
+        // Note: In a real app, you'd use a weather API with proper API keys
+        // This is a mock implementation for demonstration
+        const weatherConditions = ["clear", "clouds", "rain", "thunderstorm", "snow", "mist"];
+        const randomWeather = weatherConditions[Math.floor(Math.random() * weatherConditions.length)];
+
+        // Mock temperature between 10°C and 30°C
+        const temp = Math.floor(Math.random() * 20) + 10;
+
+        weatherText.innerHTML = `${weatherEmoji[randomWeather] || weatherEmoji.default} ${temp}°C`;
+      } catch (error) {
+        console.error("Error fetching weather:", error);
+        weatherText.textContent = "Weather unavailable";
+      }
+    }
+
+    // Streak tracking
+    function updateStreak() {
+      const today = new Date().toDateString();
+      const lastDate = localStorage.getItem('lastActivityDate');
+
+      if (lastDate === today) {
+        return; // Already logged today
+      }
+
+      const yesterday = new Date();
+      yesterday.setDate(yesterday.getDate() - 1);
+
+      if (lastDate === yesterday.toDateString()) {
+        // Consecutive day
+        currentStreak = parseInt(localStorage.getItem('streak') || '0') + 1;
+      } else if (!lastDate) {
+        // First time
+        currentStreak = 1;
+      } else {
+        // Broken streak
+        currentStreak = 1;
+      }
+
+      localStorage.setItem('streak', currentStreak.toString());
+      localStorage.setItem('lastActivityDate', today);
+      streakDisplay.textContent = `${currentStreak} day${currentStreak !== 1 ? 's' : ''}`;
+    }
+
+    // Initialize the app
+    window.addEventListener('load', () => {
+      // Load saved journal entries
+      const savedNote = localStorage.getItem('journalEntries');
+      if (savedNote) journalTextArea.value = JSON.parse(savedNote)[0]?.content || "";
+
+      // Load mood log
+      loadMoodLog();
+
+      // Initialize weather
+      fetchWeather();
+
+      // Initialize streak
+      const savedStreak = localStorage.getItem('streak');
+      if (savedStreak) {
+        currentStreak = parseInt(savedStreak);
+        streakDisplay.textContent = `${currentStreak} day${currentStreak !== 1 ? 's' : ''}`;
+      }
+
+      // Check if we need to reset streak (missed a day)
+      const lastDate = localStorage.getItem('lastActivityDate');
+      if (lastDate) {
+        const lastActivity = new Date(lastDate);
+        const today = new Date();
+        const diffDays = Math.floor((today - lastActivity) / (1000 * 60 * 60 * 24));
+
+        if (diffDays > 1) {
+          // More than one day has passed, reset streak
+          currentStreak = 0;
+          localStorage.setItem('streak', '0');
+          streakDisplay.textContent = "0 days";
+        } else if (diffDays === 1 && today.toDateString() !== lastDate) {
+          // It's a new day, but we haven't logged yet
+          // Don't update streak until user does something
+        }
+      }
+    });
+  </script>
+</body>
+
+</html>

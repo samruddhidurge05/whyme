@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>WhyMe — This Just Happened</title>
+  <link href="https://fonts.googleapis.com/css2?family=Comfortaa&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: linear-gradient(to bottom right, #ffe4ec, #f3d8fc);
+      font-family: 'Comfortaa', cursive;
+      animation: softGlow 10s infinite alternate;
+      overflow-x: hidden;
+    }
+
+
+
+    @keyframes softGlow {
+      0% {
+        background-color: #fff0f5;
+      }
+
+      100% {
+        background-color: #ffe8f0;
+      }
+    }
+
+    /* Navigation Styles */
+    nav {
+      background-color: #ff6b81;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 30px;
+      color: white;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    nav .logo {
+      font-size: 1.8rem;
+      font-weight: bold;
+      text-shadow: 1px 1px #e84a5f;
+      transition: transform 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    nav .logo:hover {
+      transform: scale(1.05);
+    }
+
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 20px;
+    }
+
+    nav ul li a {
+      text-decoration: none;
+      color: white;
+      font-weight: 500;
+      position: relative;
+      padding: 5px 10px;
+      transition: all 0.3s ease;
+    }
+
+    nav ul li a::before {
+      content: "";
+      position: absolute;
+      width: 0;
+      height: 2px;
+      bottom: 0;
+      left: 0;
+      background-color: white;
+      transition: all 0.3s ease;
+    }
+
+    nav ul li a:hover::before {
+      width: 100%;
+    }
+
+    nav ul li a::after {
+      content: "";
+      position: absolute;
+      width: 0;
+      height: 2px;
+      top: 0;
+      right: 0;
+      background-color: white;
+      transition: all 0.3s ease;
+    }
+
+    nav ul li a:hover::after {
+      width: 100%;
+    }
+
+    nav ul li a:hover {
+      transform: translateY(-3px);
+      text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+    }
+
+    /* Dark Mode Toggle */
+    .dark-toggle {
+      position: absolute;
+      top: 1.5rem;
+      right: 1.5rem;
+      background: var(--primary);
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+      transition: all 0.3s ease;
+      z-index: 1001;
+    }
+
+    .container {
+      text-align: center;
+      background: rgba(255, 255, 255, 0.45);
+      backdrop-filter: blur(10px);
+      padding: 2rem;
+      border-radius: 2rem;
+      box-shadow: 0 25px 50px rgba(255, 105, 135, 0.15);
+      max-width: 90%;
+      width: 400px;
+      margin: 4rem auto 1rem;
+    }
+
+    .main-header {
+      font-size: 2.5rem;
+      color: #2b2b2b;
+      font-weight: 600;
+      margin-bottom: 1rem;
+    }
+
+    .ticker {
+      overflow: hidden;
+      white-space: nowrap;
+      height: 2rem;
+      color: #d64568;
+      font-style: italic;
+      font-family: 'Rubik', sans-serif;
+      margin: 1rem auto;
+      mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+    }
+
+    #tickerText {
+      display: inline-block;
+      padding-left: 100%;
+      animation: scrollLeft 20s linear infinite;
+    }
+
+    @keyframes scrollLeft {
+      0% {
+        transform: translateX(0);
+      }
+
+      100% {
+        transform: translateX(-100%);
+      }
+    }
+
+    .illustration img {
+      width: 220px;
+      margin: 1rem 0;
+      border-radius: 20px;
+      box-shadow: 0 8px 18px rgba(255, 0, 85, 0.12);
+    }
+
+    .button-group {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      margin-top: 2rem;
+    }
+
+    .nav-button {
+      padding: 1rem;
+      border-radius: 12px;
+      font-size: 1.1rem;
+      font-weight: 500;
+      cursor: pointer;
+      box-shadow: 0 8px 20px rgba(255, 0, 85, 0.1);
+      transition: 0.3s;
+    }
+
+    .red {
+      background: #ff6b81;
+      color: white;
+    }
+
+    .red:hover {
+      background: #ff4b65;
+    }
+
+    .pink {
+      background: #ffd6e8;
+      color: #2b2b2b;
+    }
+
+    .pink:hover {
+      background: #ffc0db;
+    }
+
+    .lavender {
+      background: #d3b5e5;
+      color: #2b2b2b;
+    }
+
+    .lavender:hover {
+      background: #c4a0e0;
+    }
+
+
+
+    #mood-section {
+      text-align: center;
+      margin: 2rem auto;
+    }
+
+    #mood-section input[type=range] {
+      width: 90%;
+      max-width: 300px;
+    }
+
+    #moodDisplay {
+      font-size: 2rem;
+      margin-top: 10px;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+
+      0%,
+      100% {
+        transform: scale(1);
+      }
+
+      50% {
+        transform: scale(1.2);
+      }
+    }
+
+    .info-cards {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 1.5rem;
+      margin: 3rem auto;
+      padding: 0 1rem;
+      max-width: 960px;
+    }
+
+    .card {
+      background: white;
+      padding: 1.5rem;
+      border-radius: 1.5rem;
+      box-shadow: 0 12px 30px rgba(255, 0, 85, 0.1);
+      width: 260px;
+      text-align: center;
+      font-size: 0.95rem;
+    }
+
+    .story-section {
+      max-width: 600px;
+      margin: 3rem auto;
+      background: #fff7fa;
+      border-radius: 1.5rem;
+      box-shadow: 0 12px 30px rgba(255, 0, 85, 0.08);
+      padding: 2rem;
+    }
+
+    .story-section h2 {
+      color: #d64568;
+      margin-bottom: 1rem;
+    }
+
+    .story-input input,
+    .story-input textarea,
+    .story-input select {
+      width: 100%;
+      padding: 0.8rem;
+      font-family: 'Rubik', sans-serif;
+      border: 1px solid #ffc0db;
+      border-radius: 10px;
+      margin-bottom: 1rem;
+    }
+
+    .story-input textarea {
+      height: 120px;
+      resize: vertical;
+    }
+
+    .story-input button {
+      background: #ff6b81;
+      color: white;
+      border: none;
+      padding: 0.8rem 1.5rem;
+      border-radius: 10px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .story-input button:hover {
+      background-color: #ff3d5e;
+    }
+
+    .story {
+      display: flex;
+      gap: 1rem;
+      margin: 1rem 0;
+      background: white;
+      border-left: 4px solid #ff6b81;
+      border-radius: 1rem;
+      padding: 1rem;
+      box-shadow: 0 4px 15px rgba(255, 105, 135, 0.08);
+    }
+
+    .story .avatar {
+      font-size: 2rem;
+      width: 3rem;
+      text-align: center;
+    }
+
+    .story .content {
+      flex: 1;
+    }
+
+    .story .username {
+      font-weight: bold;
+      color: #d64568;
+      margin-bottom: 0.3rem;
+    }
+
+    .emergency {
+      background: #ff6b81;
+      color: white;
+      padding: 1rem 2rem;
+      border-radius: 1.2rem;
+      font-weight: bold;
+      margin: 3rem auto;
+      text-align: center;
+      width: fit-content;
+      cursor: pointer;
+      transition: 0.3s ease;
+    }
+
+    .emergency:hover {
+      background-color: #ff3d5e;
+    }
+
+    footer {
+      text-align: center;
+      padding: 2rem 1rem;
+      font-size: 0.9rem;
+      color: #888;
+      background-color: #fff0f4;
+      margin-top: 4rem;
+    }
+
+    .floating-emoji {
+      position: fixed;
+      font-size: 2rem;
+      animation: float 6s linear infinite;
+      pointer-events: none;
+    }
+
+    @keyframes float {
+      0% {
+        transform: translateY(100vh) rotate(0deg);
+        opacity: 1;
+      }
+
+      100% {
+        transform: translateY(-10vh) rotate(360deg);
+        opacity: 0;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <nav>
+    <div class="logo">
+      <i class="fas fa-heartbeat"></i> WhyMe.
+    </div>
+    <ul>
+      <li><a href="#">Home</a></li>
+      <li><a href="wtf.html">WTF?</a></li>
+      <li><a href="comfort.html">Comfort</a></li>
+      <li><a href="meme.html">Memes</a></li>
+      <li><a href="bleed.html">Bleed & Earn</a></li>
+    </ul>
+  </nav>
+
+  <div class="container">
+    <h1 class="main-header">So... you’re bleeding?</h1>
+    <div class="ticker"><span id="tickerText"></span></div>
+    <div class="illustration">
+      <img src="https://i.postimg.cc/CKv8vS9G/confused-girl-during-periods-funny.jpg" alt="Confused girl cartoon" />
+    </div>
+    <div class="button-group">
+      <div class="nav-button red" onclick="playSound()">WTF Is Happening?</div>
+      <div class="nav-button pink" onclick="playSound()">I’m Panicking</div>
+      <div class="nav-button lavender" onclick="playSound()">LOL, What Now?</div>
+    </div>
+  </div>
+
+  <div id="mood-section">
+    <h3>How are you feeling right now?</h3>
+    <input type="range" id="moodSlider" min="0" max="4" step="1" />
+    <div id="moodDisplay">😊</div>
+  </div>
+
+  <div class="info-cards">
+    <div class="card">🌸 Most start periods between 10–15 years old.</div>
+    <div class="card">🍫 Chocolate = serotonin. Yes please!</div>
+    <div class="card">🩸 Losing 3–5 tablespoons of blood = normal.</div>
+  </div>
+
+  <div class="story-section">
+    <h2>Share Your First Period Story</h2>
+    <div class="story-input">
+      <input type="text" id="userName" placeholder="Your name" />
+      <select id="userEmoji">
+        <option value="🙂">🙂</option>
+        <option value="🌸">🌸</option>
+        <option value="🦄">🦄</option>
+        <option value="👩‍⚕️">👩‍⚕️</option>
+        <option value="🥰">🥰</option>
+        <option value="😎">😎</option>
+      </select>
+      <textarea id="storyInput" placeholder="Write your story here..."></textarea>
+      <button onclick="submitStory()">Share My Story</button>
+    </div>
+    <div id="storiesDisplay"></div>
+  </div>
+
+  <div class="emergency" onclick="handleEmergency()">Emergency Help</div>
+
+  <footer>
+    Made with 💖 for everyone navigating the red tide. | © 2025 WhyMe Project
+  </footer>
+
+  <audio id="clickSound" src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_3c282e5a4f.mp3"
+    preload="auto"></audio>
+
+  <script>
+    const starterStories = [
+      { name: "RIYA", avatar: "🌸", text: "I was 13 and at school. My bestie handed me a pad and gave me a hug. ❤️" },
+      { name: "SAMRUDDHI", avatar: "🙂", text: "It happened before a trip. My mom gave me tea and explained it all." },
+      { name: "GAYTRI", avatar: "🦄", text: "I cried thinking I was dying 😂 but realized it's just nature's way." }
+    ];
+
+    function getAllStories() {
+      const saved = JSON.parse(localStorage.getItem("periodStories") || "[]");
+      return [...saved, ...starterStories];
+    }
+
+    function getSavedOnly() {
+      return JSON.parse(localStorage.getItem("periodStories") || "[]");
+    }
+
+    function displayStories() {
+      const container = document.getElementById("storiesDisplay");
+      container.innerHTML = "<h3 style='margin-bottom:1rem;color:#444;'>Community Stories</h3>";
+      const savedStories = getSavedOnly();
+      const allStories = getAllStories();
+
+      allStories.forEach((story, index) => {
+        const div = document.createElement("div");
+        div.className = "story";
+        div.innerHTML = `
+        <div class="avatar">${story.avatar}</div>
+        <div class="content">
+          <div class="username">${story.name}</div>
+          <div>${story.text}</div>
+        </div>`;
+
+        // If it's a user-submitted story, add delete button
+        if (index < savedStories.length) {
+          const deleteBtn = document.createElement("button");
+          deleteBtn.textContent = "❌";
+          deleteBtn.style.marginLeft = "auto";
+          deleteBtn.style.background = "transparent";
+          deleteBtn.style.border = "none";
+          deleteBtn.style.cursor = "pointer";
+          deleteBtn.style.fontSize = "1.2rem";
+          deleteBtn.title = "Delete story";
+          deleteBtn.onclick = () => deleteStory(index);
+          div.appendChild(deleteBtn);
+        }
+
+        container.appendChild(div);
+      });
+    }
+
+    function submitStory() {
+      const name = document.getElementById("userName").value.trim();
+      const emoji = document.getElementById("userEmoji").value;
+      const text = document.getElementById("storyInput").value.trim();
+      if (name.length < 2 || text.length < 10) {
+        alert("Please enter a name and write a story at least 10 characters long.");
+        return;
+      }
+      const newStory = { name, avatar: emoji, text };
+      const saved = JSON.parse(localStorage.getItem("periodStories") || "[]");
+      saved.unshift(newStory);
+      localStorage.setItem("periodStories", JSON.stringify(saved));
+      document.getElementById("userName").value = "";
+      document.getElementById("storyInput").value = "";
+      displayStories();
+    }
+
+    function deleteStory(indexToDelete) {
+      const saved = JSON.parse(localStorage.getItem("periodStories") || "[]");
+      saved.splice(indexToDelete, 1);
+      localStorage.setItem("periodStories", JSON.stringify(saved));
+      displayStories();
+    }
+
+    function playSound() {
+      document.getElementById("clickSound").play();
+    }
+
+    function handleEmergency() {
+      navigator.vibrate([200, 100, 200]);
+      alert("You are not alone! Call a friend or helpline ❤️");
+    }
+
+    function launchConfetti() {
+      for (let i = 0; i < 20; i++) {
+        const emoji = document.createElement("div");
+        emoji.textContent = "🎉";
+        emoji.classList.add("floating-emoji");
+        emoji.style.left = Math.random() * window.innerWidth + "px";
+        emoji.style.top = "100vh";
+        emoji.style.animationDuration = (Math.random() * 3 + 2) + "s";
+        document.body.appendChild(emoji);
+        setTimeout(() => emoji.remove(), 4000);
+      }
+    }
+
+    window.addEventListener("DOMContentLoaded", () => {
+      document.getElementById("tickerText").textContent =
+        "You are strong. You are powerful. You’ve got this. 💪 Take it slow. This will pass. 🌸 You deserve love and comfort.";
+
+      const moodSlider = document.getElementById("moodSlider");
+      const moodDisplay = document.getElementById("moodDisplay");
+      const moods = ['😢', '😟', '😐', '🙂', '🥳'];
+
+      const savedMood = localStorage.getItem('moodLevel');
+      if (savedMood) {
+        moodSlider.value = savedMood;
+        moodDisplay.textContent = moods[savedMood];
+      }
+
+      moodSlider.addEventListener("input", () => {
+        const value = moodSlider.value;
+        moodDisplay.textContent = moods[value];
+        localStorage.setItem('moodLevel', value);
+        if (value == 4) launchConfetti();
+      });
+
+      displayStories();
+    });
+  </script>
