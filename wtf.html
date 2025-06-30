@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -15,6 +16,8 @@
       color: #333;
       transition: all 0.4s ease;
     }
+
+    /* Navigation Styles */
     nav {
       background-color: #ff6b81;
       display: flex;
@@ -27,36 +30,71 @@
       z-index: 1000;
       box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
     }
-    .nav-left {
-      display: flex;
-      align-items: center;
-    }
-    .nav-right {
-      display: flex;
-      align-items: center;
-      gap: 20px;
-    }
+
     nav .logo {
       font-size: 1.8rem;
       font-weight: bold;
       text-shadow: 1px 1px #e84a5f;
+      transition: transform 0.3s ease;
       display: flex;
       align-items: center;
       gap: 10px;
     }
+
+    nav .logo:hover {
+      transform: scale(1.05);
+    }
+
     nav ul {
       list-style: none;
       display: flex;
       gap: 20px;
-      margin: 0;
-      padding: 0;
     }
+
     nav ul li a {
       text-decoration: none;
       color: white;
       font-weight: 500;
+      position: relative;
       padding: 5px 10px;
+      transition: all 0.3s ease;
     }
+
+    nav ul li a::before {
+      content: "";
+      position: absolute;
+      width: 0;
+      height: 2px;
+      bottom: 0;
+      left: 0;
+      background-color: white;
+      transition: all 0.3s ease;
+    }
+
+    nav ul li a:hover::before {
+      width: 100%;
+    }
+
+    nav ul li a::after {
+      content: "";
+      position: absolute;
+      width: 0;
+      height: 2px;
+      top: 0;
+      right: 0;
+      background-color: white;
+      transition: all 0.3s ease;
+    }
+
+    nav ul li a:hover::after {
+      width: 100%;
+    }
+
+    nav ul li a:hover {
+      transform: translateY(-3px);
+      text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+    }
+
     #themeToggle {
       background: none;
       border: none;
@@ -65,32 +103,38 @@
       cursor: pointer;
       transition: all 0.3s ease;
     }
+
     #themeToggle.glow {
       box-shadow: 0 0 10px #fff, 0 0 20px #ff6b81;
       border-radius: 50%;
       background: white;
       color: #ff6b81;
     }
+
     .container {
       padding: 40px;
       text-align: center;
     }
+
     .title {
       font-size: 2.5rem;
       margin-bottom: 20px;
       color: #ff6b81;
     }
+
     .message-box {
       font-size: 1.2rem;
       margin-bottom: 40px;
       color: #444;
     }
+
     .options {
       display: flex;
       flex-wrap: wrap;
       gap: 20px;
       justify-content: center;
     }
+
     .option {
       background: #d3b5e5;
       border-radius: 15px;
@@ -101,17 +145,21 @@
       box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
       color: #fff;
     }
+
     .option:hover {
       background: #ff6b81;
       transform: scale(1.05);
     }
+
     .option h3 {
       margin-top: 0;
       font-size: 1.4rem;
     }
+
     .option p {
       font-size: 0.95rem;
     }
+
     .chat-box {
       max-width: 600px;
       margin: 50px auto;
@@ -120,28 +168,33 @@
       box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
       overflow: hidden;
     }
+
     .chat-header {
       background: #ff6b81;
       color: white;
       padding: 15px;
       font-size: 1.3rem;
     }
+
     .chat-messages {
       padding: 20px;
       height: 300px;
       overflow-y: auto;
       background-color: #fce8ef;
     }
+
     .chat-input {
       display: flex;
       border-top: 1px solid #ddd;
     }
+
     .chat-input input {
       flex: 1;
       padding: 15px;
       border: none;
       outline: none;
     }
+
     .chat-input button {
       background: #ff6b81;
       border: none;
@@ -149,18 +202,25 @@
       padding: 15px 20px;
       cursor: pointer;
     }
+
     .message {
       margin-bottom: 10px;
     }
+
     .user-msg {
       text-align: right;
       color: #4a148c;
     }
+
     .bot-msg {
       text-align: left;
       color: #6a1b9a;
     }
-    .pretty-explained, .comfort-mode, .meme-learner, .real-talk {
+
+    .pretty-explained,
+    .comfort-mode,
+    .meme-learner,
+    .real-talk {
       max-width: 800px;
       margin: 60px auto;
       background: #fff0f8;
@@ -169,10 +229,18 @@
       box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
       text-align: left;
     }
-    .pretty-explained h2, .comfort-mode h2, .meme-learner h2, .real-talk h2 {
+
+    .pretty-explained h2,
+    .comfort-mode h2,
+    .meme-learner h2,
+    .real-talk h2 {
       color: #ff6b81;
     }
-    .pretty-explained p, .comfort-mode p, .meme-learner p, .real-talk p {
+
+    .pretty-explained p,
+    .comfort-mode p,
+    .meme-learner p,
+    .real-talk p {
       font-size: 1rem;
       line-height: 1.6;
       color: #444;
@@ -183,20 +251,25 @@
       background: linear-gradient(to bottom right, #2b2b2b, #1a1a1a);
       color: #f5f5f5;
     }
+
     .dark-mode nav {
       background-color: #444;
     }
+
     .dark-mode .option {
       background: #5e4b8b;
       color: #fff;
     }
+
     .dark-mode .chat-box {
       background: #333;
       color: #fff;
     }
+
     .dark-mode .chat-messages {
       background-color: #444;
     }
+
     .dark-mode .chat-input input {
       background-color: #222;
       color: white;
@@ -206,27 +279,29 @@
 
 <body>
   <nav>
-    <div class="nav-left">
-      <div class="logo">
-        <i class="fas fa-heartbeat"></i> WhyMe.
-      </div>
+    <div class="logo">
+      <i class="fas fa-heartbeat"></i> WhyMe.
     </div>
-    <div class="nav-right">
-      <ul>
-        <li><a href="#">Home</a></li>
-        <li><a href="#">WTF?</a></li>
-        <li><a href="#">Comfort Zone</a></li>
-        <li><a href="#">Memes</a></li>
-        <li><a href="#">Bleed & Earn</a></li>
-      </ul>
-      <button id="themeToggle" title="Toggle Theme" aria-label="Toggle Theme"><i class="fas fa-moon"></i></button>
-    </div>
+    <ul>
+      <li><a href="home.html">Home</a></li>
+      <li><a href="wtf.html">WTF?</a></li>
+      <li><a href="comfort.html">Comfort Zone</a></li>
+      <li><a href="memes.html">Memes</a></li>
+      <li><a href="bleed.html">Bleed & Earn</a></li>
+      <li>
+        <button class="theme-toggle" id="themeToggle">
+          <i class="fas fa-moon"></i>
+        </button>
+      </li>
+    </ul>
   </nav>
+
 
   <div class="container">
     <h1 class="title">WTF is Happening?! 😵‍💫</h1>
     <div class="message-box">
-      Okay bestie, you just got your period and your brain's like “what the actual flow?” 😳 Don’t worry, pick your vibe and let’s break it down your way 💖
+      Okay bestie, you just got your period and your brain's like “what the actual flow?” 😳 Don’t worry, pick your vibe
+      and let’s break it down your way 💖
     </div>
     <div class="options">
       <div class="option" onclick="document.querySelector('.chat-box').scrollIntoView({ behavior: 'smooth' })">
@@ -265,17 +340,24 @@
 
   <div class="pretty-explained">
     <h2>Pretty Explained 📸</h2>
-    <p>Periods happen when the lining of the uterus sheds, which causes bleeding through the vagina. This is part of the menstrual cycle and usually happens every month. It’s your body’s natural way of preparing for pregnancy, and if no pregnancy happens, it resets itself. It can come with cramps, mood swings, and cravings, but it’s also totally normal and healthy 🌸✨</p>
+    <p>Periods happen when the lining of the uterus sheds, which causes bleeding through the vagina. This is part of the
+      menstrual cycle and usually happens every month. It’s your body’s natural way of preparing for pregnancy, and if
+      no pregnancy happens, it resets itself. It can come with cramps, mood swings, and cravings, but it’s also totally
+      normal and healthy 🌸✨</p>
   </div>
 
   <div class="comfort-mode">
     <h2>Comfort Mode 🧸</h2>
-    <p>Sweetheart, if you're feeling overwhelmed 😔 just pause for a second. Breathe in… breathe out. 💞 You're doing amazing. Maybe grab a warm drink ☕, wrap up in a blanket 🛌, and put on some soft music 🎶. You are loved. You are strong. You will get through this 💖🌈</p>
+    <p>Sweetheart, if you're feeling overwhelmed 😔 just pause for a second. Breathe in… breathe out. 💞 You're doing
+      amazing. Maybe grab a warm drink ☕, wrap up in a blanket 🛌, and put on some soft music 🎶. You are loved. You are
+      strong. You will get through this 💖🌈</p>
   </div>
 
   <div class="meme-learner">
     <h2>Meme Learner 😎</h2>
-    <img src="https://i.postimg.cc/Prsfrkht/The-meme-depicts-the-sudden-flow-of-blood-during-menstruation-Source-Instagram.png" style="width:290px">
+    <img
+      src="https://i.postimg.cc/Prsfrkht/The-meme-depicts-the-sudden-flow-of-blood-during-menstruation-Source-Instagram.png"
+      style="width:290px">
     <p>Learning about periods but in meme mode? Let’s gooo 💃😂<br>
       “When your uterus becomes the drama queen every month: <em>‘Let’s tear down the lining and cry!’</em>”<br>
       “Cramps be like: surprise! I’m here to ruin your day 🐍”<br>
@@ -284,7 +366,10 @@
 
   <div class="real-talk">
     <h2>Real Talk 🪙</h2>
-    <p>Hey you 💕 — let's talk honestly. Periods can feel like a rollercoaster, and sometimes you just need someone to explain it all like a real friend. So here’s the deal: your body is magical, and this process? It’s a sign of strength, not weakness. You might cry one second and crave chocolate the next 🍫— totally okay. We’re here to tell you the truth, no sugarcoating, just love and facts. You’ve got this, bestie 💪✨</p>
+    <p>Hey you 💕 — let's talk honestly. Periods can feel like a rollercoaster, and sometimes you just need someone to
+      explain it all like a real friend. So here’s the deal: your body is magical, and this process? It’s a sign of
+      strength, not weakness. You might cry one second and crave chocolate the next 🍫— totally okay. We’re here to tell
+      you the truth, no sugarcoating, just love and facts. You’ve got this, bestie 💪✨</p>
   </div>
 
   <script>
@@ -322,4 +407,5 @@
     });
   </script>
 </body>
+
 </html>
